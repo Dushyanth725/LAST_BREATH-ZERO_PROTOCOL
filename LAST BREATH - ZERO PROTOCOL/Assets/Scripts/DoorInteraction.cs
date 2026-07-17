@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
 {
-    public GameObject prompt;       // E image
-    public Transform doorPivot;     // Door_controller
+    public GameObject prompt;
+    public Transform doorPivot;
     public float openAngle = 90f;
     public float speed = 3f;
 
     bool playerInside = false;
     bool opened = false;
+    bool isMoving = false;
 
     Quaternion closedRot;
     Quaternion openedRot;
@@ -18,46 +19,45 @@ public class DoorInteraction : MonoBehaviour
         closedRot = doorPivot.localRotation;
         openedRot = closedRot * Quaternion.Euler(0, openAngle, 0);
 
-        prompt.SetActive(false);
+        if (prompt != null)
+            prompt.SetActive(false);
+    }
+
+    public void ShowPrompt()
+    {
+        playerInside = true;
+
+        if (prompt != null)
+            prompt.SetActive(true);
+    }
+
+    public void HidePrompt()
+    {
+        playerInside = false;
+
+        if (prompt != null)
+            prompt.SetActive(false);
     }
 
     void Update()
     {
-        if(playerInside)
+        if (playerInside && Input.GetKeyDown(KeyCode.E) && !isMoving)
         {
-            if(Input.GetKeyDown(KeyCode.E))
-            {
-                opened = !opened;
-            }
+            opened = !opened;
+            isMoving = true;
         }
 
-        if(opened)
-            doorPivot.localRotation = Quaternion.Slerp(
-                doorPivot.localRotation,
-                openedRot,
-                speed * Time.deltaTime);
-        else
-            doorPivot.localRotation = Quaternion.Slerp(
-                doorPivot.localRotation,
-                closedRot,
-                speed * Time.deltaTime);
-    }
+        Quaternion target = opened ? openedRot : closedRot;
 
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            playerInside = true;
-            prompt.SetActive(true);
-        }
-    }
+        doorPivot.localRotation = Quaternion.RotateTowards(
+            doorPivot.localRotation,
+            target,
+            speed * 100f * Time.deltaTime);
 
-    void OnTriggerExit(Collider other)
-    {
-        if(other.CompareTag("Player"))
+        if (Quaternion.Angle(doorPivot.localRotation, target) < 0.5f)
         {
-            playerInside = false;
-            prompt.SetActive(false);
+            doorPivot.localRotation = target;
+            isMoving = false;
         }
     }
 }

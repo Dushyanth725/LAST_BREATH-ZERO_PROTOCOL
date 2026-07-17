@@ -10,6 +10,7 @@ public class DrawerInteraction : MonoBehaviour
 
     bool playerInside = false;
     bool opened = false;
+    bool isMoving = false;
 
     Vector3 closedPos;
     Vector3 openedPos;
@@ -17,44 +18,48 @@ public class DrawerInteraction : MonoBehaviour
     void Start()
     {
         closedPos = drawer.localPosition;
-
-        // Slide forward along local Z
         openedPos = closedPos - Vector3.forward * slideDistance;
 
-        prompt.SetActive(false);
+        if (prompt != null)
+            prompt.SetActive(false);
+    }
+
+    public void ShowPrompt()
+    {
+        playerInside = true;
+
+        if (prompt != null)
+            prompt.SetActive(true);
+    }
+
+    public void HidePrompt()
+    {
+        playerInside = false;
+
+        if (prompt != null)
+            prompt.SetActive(false);
     }
 
     void Update()
     {
-        if (playerInside && Input.GetKeyDown(KeyCode.E))
+        if (playerInside && Input.GetKeyDown(KeyCode.E) && !isMoving)
         {
             opened = !opened;
+            isMoving = true;
         }
 
         Vector3 target = opened ? openedPos : closedPos;
 
-        drawer.localPosition = Vector3.Lerp(
+        drawer.localPosition = Vector3.MoveTowards(
             drawer.localPosition,
             target,
             speed * Time.deltaTime
         );
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Player"))
+        if (Vector3.Distance(drawer.localPosition, target) < 0.01f)
         {
-            playerInside = true;
-            prompt.SetActive(true);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            playerInside = false;
-            prompt.SetActive(false);
+            drawer.localPosition = target;
+            isMoving = false;
         }
     }
 }
