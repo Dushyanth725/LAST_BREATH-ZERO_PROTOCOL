@@ -7,6 +7,7 @@ public class InteractionManager : MonoBehaviour
 
     DoorInteraction currentDoor;
     DrawerInteraction currentDrawer;
+    PickupObject currentPickup;
 
     void Update()
     {
@@ -21,6 +22,12 @@ public class InteractionManager : MonoBehaviour
         {
             currentDrawer.HidePrompt();
             currentDrawer = null;
+        }
+
+        if (currentPickup != null)
+        {
+            currentPickup.HidePrompt();
+            currentPickup = null;
         }
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -43,6 +50,15 @@ public class InteractionManager : MonoBehaviour
             {
                 currentDrawer = drawer;
                 currentDrawer.ShowPrompt();
+                return;
+            }
+
+            PickupObject pickup = hit.collider.GetComponent<PickupObject>();
+
+            if (pickup != null)
+            {
+                currentPickup = pickup;
+                currentPickup.ShowPrompt();
                 return;
             }
         }
