@@ -35,6 +35,7 @@ public class InteractionManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, interactDistance, interactLayer))
         {
+            Debug.Log("Looking at : " + hit.collider.name);
             DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
 
             if (door != null)
@@ -53,7 +54,7 @@ public class InteractionManager : MonoBehaviour
                 return;
             }
 
-            PickupObject pickup = hit.collider.GetComponent<PickupObject>();
+            PickupObject pickup = hit.collider.GetComponentInParent<PickupObject>();
 
             if (pickup != null)
             {
