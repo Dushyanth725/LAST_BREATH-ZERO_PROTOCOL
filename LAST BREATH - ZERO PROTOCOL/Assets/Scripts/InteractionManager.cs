@@ -1,47 +1,44 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractionManager : MonoBehaviour
 {
     public float interactDistance = 3f;
     public LayerMask interactLayer;
 
-    DoorInteraction currentDoor;
-    DrawerInteraction currentDrawer;
-    PickupObject currentPickup;
+    public GameObject crosshair;
+    public GameObject eText;
+    public GameObject qText;
+
+    void Start()
+    {
+        crosshair.SetActive(true);
+        eText.SetActive(false);
+        qText.SetActive(false);
+    }
 
     void Update()
     {
-        // Hide previous prompts every frame
-        if (currentDoor != null)
-        {
-            currentDoor.HidePrompt();
-            currentDoor = null;
-        }
-
-        if (currentDrawer != null)
-        {
-            currentDrawer.HidePrompt();
-            currentDrawer = null;
-        }
-
-        if (currentPickup != null)
-        {
-            currentPickup.HidePrompt();
-            currentPickup = null;
-        }
+        crosshair.SetActive(true);
+        eText.SetActive(false);
+        qText.SetActive(false);
 
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, interactDistance, interactLayer))
         {
-            Debug.Log("Looking at : " + hit.collider.name);
             DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
 
             if (door != null)
             {
-                currentDoor = door;
-                currentDoor.ShowPrompt();
+                crosshair.SetActive(false);
+                eText.SetActive(true);
+                qText.SetActive(false);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                    door.Interact();
+
                 return;
             }
 
@@ -49,17 +46,27 @@ public class InteractionManager : MonoBehaviour
 
             if (drawer != null)
             {
-                currentDrawer = drawer;
-                currentDrawer.ShowPrompt();
+                crosshair.SetActive(false);
+                eText.SetActive(true);
+                qText.SetActive(false);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                    drawer.Interact();
+
                 return;
             }
 
-            PickupObject pickup = hit.collider.GetComponentInParent<PickupObject>();
+            PickupItem pickup = hit.collider.GetComponentInParent<PickupItem>();
 
             if (pickup != null)
             {
-                currentPickup = pickup;
-                currentPickup.ShowPrompt();
+                crosshair.SetActive(false);
+                eText.SetActive(false);
+                qText.SetActive(true);
+
+                if (Input.GetKeyDown(KeyCode.Q))
+                    pickup.Interact();
+
                 return;
             }
         }
