@@ -10,6 +10,7 @@ public class DrawerInteraction : MonoBehaviour
 
     bool playerInside = false;
     bool opened = false;
+    public bool IsOpen => opened;
     bool isMoving = false;
 
     Vector3 closedPos;
