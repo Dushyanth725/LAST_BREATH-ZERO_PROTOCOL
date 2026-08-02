@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -10,65 +9,74 @@ public class InteractionManager : MonoBehaviour
     public GameObject eText;
     public GameObject qText;
 
-    void Start()
+    private void Start()
     {
         crosshair.SetActive(true);
         eText.SetActive(false);
         qText.SetActive(false);
     }
 
-    void Update()
+    private void Update()
     {
         crosshair.SetActive(true);
         eText.SetActive(false);
         qText.SetActive(false);
 
+        // If holding an item, allow dropping anywhere with Q
+       if (InventoryManager.Instance != null && InventoryManager.Instance.IsHoldingItem())
+{
+    if (Input.GetKeyDown(KeyCode.Q))
+    {
+        InventoryManager.Instance.DropHeldItem();
+        return;
+    }
+}
+
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, interactDistance, interactLayer))
+        if (!Physics.Raycast(ray, out hit, interactDistance, interactLayer))
+            return;
+        Debug.Log("Hit : " + hit.collider.name);
+        // Door
+        DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
+        if (door != null)
         {
-            DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
+            crosshair.SetActive(false);
+            eText.SetActive(true);
 
-            if (door != null)
+            if (Input.GetKeyDown(KeyCode.E))
+                door.Interact();
+
+            return;
+        }
+
+        // Drawer
+        DrawerInteraction drawer = hit.collider.GetComponent<DrawerInteraction>();
+        if (drawer != null)
+        {
+            crosshair.SetActive(false);
+            eText.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.E))
+                drawer.Interact();
+
+            return;
+        }
+
+        // Pickup Item
+        ItemPickup item = hit.collider.GetComponentInParent<ItemPickup>();
+        if (item != null)
+        {
+            crosshair.SetActive(false);
+            qText.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                crosshair.SetActive(false);
-                eText.SetActive(true);
-                qText.SetActive(false);
-
-                if (Input.GetKeyDown(KeyCode.E))
-                    door.Interact();
-
-                return;
+                InventoryManager.Instance.PickUp(item);
             }
 
-            DrawerInteraction drawer = hit.collider.GetComponent<DrawerInteraction>();
-
-            if (drawer != null)
-            {
-                crosshair.SetActive(false);
-                eText.SetActive(true);
-                qText.SetActive(false);
-
-                if (Input.GetKeyDown(KeyCode.E))
-                    drawer.Interact();
-
-                return;
-            }
-
-            PickupItem pickup = hit.collider.GetComponentInParent<PickupItem>();
-
-            if (pickup != null)
-            {
-                crosshair.SetActive(false);
-                eText.SetActive(false);
-                qText.SetActive(true);
-
-                if (Input.GetKeyDown(KeyCode.Q))
-                    pickup.Interact();
-
-                return;
-            }
+            return;
         }
     }
 }

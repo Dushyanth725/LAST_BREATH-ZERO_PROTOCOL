@@ -5,58 +5,102 @@ public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
-    public Image itemImage;
+    [Header("UI")]
+    public Image inventoryImage;
+
+    [Header("Drop Settings")]
     public Transform dropPoint;
 
-    private PickupItem currentItem;
+    private ItemPickup heldItem;
 
-    private void Awake()
+private void Awake()
+{
+    Instance = this;
+
+    if (inventoryImage != null)
+        inventoryImage.gameObject.SetActive(false);
+}
+
+    public bool IsHoldingItem()
     {
-        Instance = this;
+        return heldItem != null;
     }
 
-    void Update()
+    public void PickUp(ItemPickup item)
     {
-        if (currentItem != null && Input.GetKeyDown(KeyCode.Q))
-        {
-            DropItem();
-        }
-    }
-
-    public void PickUp(PickupItem item)
-    {
-        if (currentItem != null)
+        if (heldItem != null)
             return;
 
-        currentItem = item;
+        heldItem = item;
 
-        item.gameObject.SetActive(false);
+        heldItem.PickUp();
 
-        if (itemImage != null)
-            itemImage.gameObject.SetActive(true);
+       if (inventoryImage != null)
+    inventoryImage.gameObject.SetActive(true);
     }
 
-    void DropItem()
+    private bool TryPlaceItem()
+{
+    Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+
+    RaycastHit hit;
+
+    if (!Physics.Raycast(ray, out hit, 3f))
+        return false;
+
+    DrawerInteraction drawer = hit.collider.GetComponent<DrawerInteraction>();
+
+    if (drawer == null)
+        drawer = hit.collider.GetComponentInParent<DrawerInteraction>();
+
+    if (drawer == null)
+        return false;
+
+    if (!drawer.IsOpen)
+        return false;
+
+   ItemPlacePoint[] placePoints = FindObjectsOfType<ItemPlacePoint>();
+
+ItemPlacePoint placePoint = null;
+
+foreach (ItemPlacePoint p in placePoints)
+{
+    if (p.drawer == drawer)
     {
-        
-        currentItem.transform.SetParent(null);
-        currentItem.transform.position = dropPoint.position;
-        currentItem.gameObject.SetActive(true);
-        currentItem.transform.position = dropPoint.position;
-        Debug.Log("Dropped at: " + dropPoint.position);
-
-        Rigidbody rb = currentItem.GetComponent<Rigidbody>();
-
-        if (rb != null)
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.useGravity = true;
-        }
-
-        if (itemImage != null)
-            itemImage.gameObject.SetActive(false);
-
-        currentItem = null;
+        placePoint = p;
+        break;
     }
+}
+
+    if (placePoint == null)
+        return false;
+
+    if (!placePoint.CanPlaceItem())
+        return false;
+
+    heldItem.Place(placePoint);
+
+    heldItem = null;
+
+    if (inventoryImage != null)
+        inventoryImage.gameObject.SetActive(false);
+
+    return true;
+}
+
+   public void DropHeldItem()
+{
+    if (heldItem == null)
+        return;
+
+    if (TryPlaceItem())
+        return;
+
+    heldItem.Drop(dropPoint);
+
+    heldItem = null;
+
+    if (inventoryImage != null)
+        inventoryImage.gameObject.SetActive(false);
+}
 }
