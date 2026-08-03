@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2951657193242490182}
   - component: {fileID: 5403453627941691239}
   - component: {fileID: 4506851497777693917}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1573885582219759920}
   - component: {fileID: 2352622578104014126}
   - component: {fileID: 832632260522476081}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 5737638758335053909}
   - component: {fileID: 765169300778128614}
   - component: {fileID: 253456182887701635}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 4280056767503046524}
   - component: {fileID: 5611521565105312867}
   - component: {fileID: 8393683684128460370}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 5394063988173250206}
   - component: {fileID: 7237030397693952527}
   - component: {fileID: 3857801031147093592}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 5530374992400461293}
   - component: {fileID: 1510101358897538353}
   - component: {fileID: 7915069557192975681}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 7554709635293598111}
   - component: {fileID: 6500658200967692623}
   - component: {fileID: 5704221046910660354}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 7657649644836344510}
   - component: {fileID: 5783079579768802117}
   - component: {fileID: 1915503912435926374}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 7144214890789879747}
   - component: {fileID: 8194185351789858219}
   - component: {fileID: 7243143319787766541}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 8607911563806468700}
   - component: {fileID: 7572618733888431844}
   - component: {fileID: 2901825951398576010}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.008
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 743834210249153901}
   - component: {fileID: 2744539909976032730}
   - component: {fileID: 6433054338591745766}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -924,7 +924,7 @@ GameObject:
   - component: {fileID: 3979412330515147884}
   - component: {fileID: 7492206855073946902}
   - component: {fileID: 1053172929682119616}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1005,7 +1005,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 380951570594965052}
-  m_Layer: 0
+  - component: {fileID: 1957229593055857607}
+  - component: {fileID: 1443933376844892511}
+  m_Layer: 3
   m_Name: RollingChair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1020,7 +1022,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7786508301509226393}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.16158508, z: -0, w: 0.9868588}
+  m_LocalRotation: {x: 0, y: 0.16158657, z: 0, w: 0.98685855}
   m_LocalPosition: {x: 1.004, y: -1.932, z: 3.145}
   m_LocalScale: {x: 1.4384, y: 1.4384, z: 1.4384}
   m_ConstrainProportionsScale: 1
@@ -1041,6 +1043,44 @@ Transform:
   - {fileID: 7554709635293598111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 18.598, z: 0}
+--- !u!65 &1957229593055857607
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7786508301509226393}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.5584708, z: 1.0209278}
+  m_Center: {x: 1.5609229e-18, y: 1.0233821, z: 0.030055178}
+--- !u!114 &1443933376844892511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7786508301509226393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cff8cb96e45e22409f452ac03382532, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  holdDistance: 2.2
+  moveSpeed: 3
+  rotationSpeed: 120
+  rotationOffset: -90
 --- !u!1 &8397561211247129282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1052,7 +1092,7 @@ GameObject:
   - component: {fileID: 2393659094970040095}
   - component: {fileID: 6932921749397515455}
   - component: {fileID: 5629524915735257929}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Chair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1135,7 +1175,7 @@ GameObject:
   - component: {fileID: 4435466143222801826}
   - component: {fileID: 3253862553030974480}
   - component: {fileID: 5152993282782797169}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cylinder.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

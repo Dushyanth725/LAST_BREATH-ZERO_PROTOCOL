@@ -80,22 +80,39 @@ public class InteractionManager : MonoBehaviour
 
         Debug.Log("Hit : " + hit.collider.name);
 
-        //==================================================
-        // DOOR
-        //==================================================
+      //==================================================
+// SINGLE DOOR
+//==================================================
 
-        DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
+DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
 
-        if (door != null)
-        {
-            crosshair.SetActive(false);
-            eText.SetActive(true);
+if (door != null)
+{
+    crosshair.SetActive(false);
+    eText.SetActive(true);
 
-            if (Input.GetKeyDown(KeyCode.E))
-                door.Interact();
+    if (Input.GetKeyDown(KeyCode.E))
+        door.Interact();
 
-            return;
-        }
+    return;
+}
+
+//==================================================
+// DOUBLE DOOR
+//==================================================
+
+DoubleDoorInteraction doubleDoor = hit.collider.GetComponent<DoubleDoorInteraction>();
+
+if (doubleDoor != null)
+{
+    crosshair.SetActive(false);
+    eText.SetActive(true);
+
+    if (Input.GetKeyDown(KeyCode.E))
+        doubleDoor.Interact();
+
+    return;
+}
 
         //==================================================
         // DRAWER
