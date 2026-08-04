@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class DrawerInteraction : MonoBehaviour
 {
-    
     public Transform drawer;
 
     public float slideDistance = 0.4f;
     public float speed = 3f;
+
+    // Set this in the Inspector
+    public Vector3 slideDirection = Vector3.forward;
 
     bool playerInside = false;
     bool opened = false;
@@ -19,20 +21,17 @@ public class DrawerInteraction : MonoBehaviour
     void Start()
     {
         closedPos = drawer.localPosition;
-        openedPos = closedPos - Vector3.forward * slideDistance;
-
-      
+        openedPos = closedPos + slideDirection.normalized * slideDistance;
     }
 
     public void Interact()
-{
-    if (!isMoving)
     {
-        opened = !opened;
-        isMoving = true;
+        if (!isMoving)
+        {
+            opened = !opened;
+            isMoving = true;
+        }
     }
-}
-  
 
     void Update()
     {

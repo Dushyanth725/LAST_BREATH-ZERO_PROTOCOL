@@ -726,6 +726,7 @@ GameObject:
   - component: {fileID: 7189582471153251794}
   - component: {fileID: 3116457353056305223}
   - component: {fileID: 4124001384662622200}
+  - component: {fileID: 5400402076896978289}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -798,6 +799,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5400402076896978289
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5023291556157832478}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.008000002, y: 0.008, z: 0.011891721}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5249500793425737464
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,6 +997,7 @@ GameObject:
   - component: {fileID: 6000167314407181710}
   - component: {fileID: 699438612413793371}
   - component: {fileID: 2823301432693625575}
+  - component: {fileID: 7062045841181260412}
   m_Layer: 0
   m_Name: Rotator
   m_TagString: Untagged
@@ -1047,6 +1070,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7062045841181260412
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471956674193101210}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0050000013, y: 0.005, z: 0.0012969193}
+  m_Center: {x: 1.1641532e-10, y: 1.783548e-11, z: -0.00059845933}
 --- !u!1 &6522847222193387407
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,6 +1268,7 @@ GameObject:
   - component: {fileID: 782547820412934542}
   - component: {fileID: 1896550609397438502}
   - component: {fileID: 8124551591840970591}
+  - component: {fileID: 7900152700345649582}
   m_Layer: 0
   m_Name: Stand
   m_TagString: Untagged
@@ -1296,6 +1341,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7900152700345649582
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7145477267344059029}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0035000008, y: 0.0034999999, z: 0.0023333328}
+  m_Center: {x: 0, y: -1.2434498e-17, z: -0.00058333133}
 --- !u!1 &7501202601577821889
 GameObject:
   m_ObjectHideFlags: 0
