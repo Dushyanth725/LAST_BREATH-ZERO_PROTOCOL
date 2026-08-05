@@ -2,35 +2,43 @@ using UnityEngine;
 
 public class DrawerInteraction : MonoBehaviour
 {
+    [Header("Drawer")]
     public Transform drawer;
 
+    [Header("Movement")]
     public float slideDistance = 0.4f;
     public float speed = 3f;
-
-    // Set this in the Inspector
     public Vector3 slideDirection = Vector3.forward;
 
-    bool playerInside = false;
-    bool opened = false;
-    public bool IsOpen => opened;
-    bool isMoving = false;
+    private bool opened = false;
+    private bool isMoving = false;
 
-    Vector3 closedPos;
-    Vector3 openedPos;
+    private Vector3 closedPos;
+    private Vector3 openedPos;
+
+    private PickupObject[] itemsInside;
 
     void Start()
     {
         closedPos = drawer.localPosition;
         openedPos = closedPos + slideDirection.normalized * slideDistance;
+
+        // Find every pickup object inside this drawer
+        itemsInside = drawer.GetComponentsInChildren<PickupObject>(true);
+
+        // Drawer starts closed
+        SetItemsPickup(false);
     }
 
     public void Interact()
     {
-        if (!isMoving)
-        {
-            opened = !opened;
-            isMoving = true;
-        }
+        if (isMoving)
+            return;
+
+        opened = !opened;
+        isMoving = true;
+
+        SetItemsPickup(opened);
     }
 
     void Update()
@@ -43,10 +51,20 @@ public class DrawerInteraction : MonoBehaviour
             speed * Time.deltaTime
         );
 
-        if (Vector3.Distance(drawer.localPosition, target) < 0.01f)
+        if (Vector3.Distance(drawer.localPosition, target) < 0.001f)
         {
             drawer.localPosition = target;
             isMoving = false;
         }
     }
+
+   void SetItemsPickup(bool value)
+{
+    PickupObject[] items = drawer.GetComponentsInChildren<PickupObject>(true);
+
+    foreach (PickupObject item in items)
+    {
+        item.canBePickedUp = value;
+    }
+}
 }

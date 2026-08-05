@@ -8,7 +8,7 @@ public class InteractionManager : MonoBehaviour
     public GameObject crosshair;
     public GameObject eText;
     public GameObject qText;
-    public GameObject spaceText;
+  
 
     private void Start()
     {
@@ -16,8 +16,7 @@ public class InteractionManager : MonoBehaviour
         eText.SetActive(false);
         qText.SetActive(false);
 
-        if (spaceText != null)
-            spaceText.SetActive(false);
+        
     }
 
     private void Update()
@@ -32,8 +31,7 @@ public class InteractionManager : MonoBehaviour
             eText.SetActive(true);
             qText.SetActive(false);
 
-            if (spaceText != null)
-                spaceText.SetActive(false);
+           
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -51,22 +49,6 @@ public class InteractionManager : MonoBehaviour
         eText.SetActive(false);
         qText.SetActive(false);
 
-        if (spaceText != null)
-            spaceText.SetActive(false);
-
-        //==================================================
-        // ITEM DROP
-        //==================================================
-
-        if (InventoryManager.Instance != null &&
-            InventoryManager.Instance.IsHoldingItem())
-        {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                InventoryManager.Instance.DropHeldItem();
-                return;
-            }
-        }
 
         //==================================================
         // RAYCAST
@@ -75,44 +57,57 @@ public class InteractionManager : MonoBehaviour
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
+        //==================================================
+        // NOTHING HIT
+        //==================================================
+
         if (!Physics.Raycast(ray, out hit, interactDistance, interactLayer))
+        {
+            if (InventoryManager.Instance != null &&
+                InventoryManager.Instance.IsHoldingItem() &&
+                Input.GetKeyDown(KeyCode.Q))
+            {
+                InventoryManager.Instance.DropHeldItem();
+            }
+
             return;
+        }
 
         Debug.Log("Hit : " + hit.collider.name);
 
-      //==================================================
-// SINGLE DOOR
-//==================================================
+        //==================================================
+        // SINGLE DOOR
+        //==================================================
 
-DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
+        DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
 
-if (door != null)
-{
-    crosshair.SetActive(false);
-    eText.SetActive(true);
+        if (door != null)
+        {
+            crosshair.SetActive(false);
+            eText.SetActive(true);
 
-    if (Input.GetKeyDown(KeyCode.E))
-        door.Interact();
+            if (Input.GetKeyDown(KeyCode.E))
+                door.Interact();
 
-    return;
-}
+            return;
+        }
 
-//==================================================
-// DOUBLE DOOR
-//==================================================
+        //==================================================
+        // DOUBLE DOOR
+        //==================================================
 
-DoubleDoorInteraction doubleDoor = hit.collider.GetComponent<DoubleDoorInteraction>();
+        DoubleDoorInteraction doubleDoor = hit.collider.GetComponent<DoubleDoorInteraction>();
 
-if (doubleDoor != null)
-{
-    crosshair.SetActive(false);
-    eText.SetActive(true);
+        if (doubleDoor != null)
+        {
+            crosshair.SetActive(false);
+            eText.SetActive(true);
 
-    if (Input.GetKeyDown(KeyCode.E))
-        doubleDoor.Interact();
+            if (Input.GetKeyDown(KeyCode.E))
+                doubleDoor.Interact();
 
-    return;
-}
+            return;
+        }
 
         //==================================================
         // DRAWER
@@ -149,24 +144,26 @@ if (doubleDoor != null)
 
             return;
         }
+//==================================================
+// PICKUP ITEM
+//==================================================
 
-        //==================================================
-        // PICKUP ITEM
-        //==================================================
+PickupObject item = hit.collider.GetComponentInParent<PickupObject>();
 
-        ItemPickup item = hit.collider.GetComponentInParent<ItemPickup>();
+if (item != null)
+{
+    if (!item.canBePickedUp)
+        return;
 
-        if (item != null)
-        {
-            crosshair.SetActive(false);
-            qText.SetActive(true);
+    crosshair.SetActive(false);
+    qText.SetActive(true);
 
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                InventoryManager.Instance.PickUp(item);
-            }
+    if (Input.GetKeyDown(KeyCode.Q))
+    {
+        InventoryManager.Instance.PickUp(item);
+    }
 
-            return;
-        }
+    return;
+}
     }
 }
