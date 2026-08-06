@@ -62,4 +62,13 @@ public class InventoryManager : MonoBehaviour
         if (inventoryImage != null)
             inventoryImage.gameObject.SetActive(false);
     }
+
+    public bool HoldingKey(string keyID)
+{
+    if (heldItem == null)
+        return false;
+
+    return heldItem.keyID == keyID;
+}
+
 }

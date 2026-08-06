@@ -8,6 +8,7 @@ public class InteractionManager : MonoBehaviour
     public GameObject crosshair;
     public GameObject eText;
     public GameObject qText;
+    public GameObject keyNeededText;
   
 
     private void Start()
@@ -15,6 +16,7 @@ public class InteractionManager : MonoBehaviour
         crosshair.SetActive(true);
         eText.SetActive(false);
         qText.SetActive(false);
+        keyNeededText.SetActive(false);
 
         
     }
@@ -48,6 +50,7 @@ public class InteractionManager : MonoBehaviour
         crosshair.SetActive(true);
         eText.SetActive(false);
         qText.SetActive(false);
+        keyNeededText.SetActive(false);
 
 
         //==================================================
@@ -81,16 +84,35 @@ public class InteractionManager : MonoBehaviour
 
         DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
 
-        if (door != null)
+if (door != null)
+{
+    crosshair.SetActive(false);
+
+    // Door needs a key
+    if (door.requiresKey)
+    {
+        if (InventoryManager.Instance.HoldingKey(door.keyID))
         {
-            crosshair.SetActive(false);
             eText.SetActive(true);
 
             if (Input.GetKeyDown(KeyCode.E))
                 door.Interact();
-
-            return;
         }
+        else
+        {
+            keyNeededText.SetActive(true);
+        }
+    }
+    else
+    {
+        eText.SetActive(true);
+
+        if (Input.GetKeyDown(KeyCode.E))
+            door.Interact();
+    }
+
+    return;
+}
 
         //==================================================
         // DOUBLE DOOR

@@ -6,6 +6,9 @@ public class PickupObject : MonoBehaviour
     [Header("Inventory")]
     public Sprite itemIcon;
 
+    [Header("Key")]
+    public string keyID = "";
+
     [HideInInspector]
     public bool canBePickedUp = true;
 
