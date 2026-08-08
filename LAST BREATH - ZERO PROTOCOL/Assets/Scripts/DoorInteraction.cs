@@ -12,6 +12,8 @@ public class DoorInteraction : MonoBehaviour
     public bool requiresKey = false;
     public string keyID = "";
 
+    private bool unlocked = false;
+
     public float openAngle = 90f;
     public float speed = 3f;
 
@@ -68,4 +70,14 @@ public class DoorInteraction : MonoBehaviour
             item.canBePickedUp = value;
         }
     }
+
+    public bool IsLocked()
+{
+    return requiresKey && !unlocked;
+}
+
+public void Unlock()
+{
+    unlocked = true;
+}
 }

@@ -1,13 +1,15 @@
 using UnityEngine;
-
+using System.Collections;
 public class InteractionManager : MonoBehaviour
 {
     public float interactDistance = 3f;
     public LayerMask interactLayer;
+    private float keyTextTimer = 0f;
 
     public GameObject crosshair;
     public GameObject eText;
     public GameObject qText;
+    public GameObject rText;
     public GameObject keyNeededText;
   
 
@@ -16,6 +18,7 @@ public class InteractionManager : MonoBehaviour
         crosshair.SetActive(true);
         eText.SetActive(false);
         qText.SetActive(false);
+        rText.SetActive(false);
         keyNeededText.SetActive(false);
 
         
@@ -23,6 +26,7 @@ public class InteractionManager : MonoBehaviour
 
     private void Update()
     {
+
         //==================================================
         // CHAIR IS BEING HELD
         //==================================================
@@ -50,6 +54,7 @@ public class InteractionManager : MonoBehaviour
         crosshair.SetActive(true);
         eText.SetActive(false);
         qText.SetActive(false);
+        qText.SetActive(false);
         keyNeededText.SetActive(false);
 
 
@@ -64,17 +69,20 @@ public class InteractionManager : MonoBehaviour
         // NOTHING HIT
         //==================================================
 
-        if (!Physics.Raycast(ray, out hit, interactDistance, interactLayer))
-        {
-            if (InventoryManager.Instance != null &&
-                InventoryManager.Instance.IsHoldingItem() &&
-                Input.GetKeyDown(KeyCode.Q))
-            {
-                InventoryManager.Instance.DropHeldItem();
-            }
+       if (!Physics.Raycast(ray, out hit, interactDistance, interactLayer))
+{
+    keyNeededText.SetActive(false);
+    keyTextTimer = 0f;
 
-            return;
-        }
+    if (InventoryManager.Instance != null &&
+        InventoryManager.Instance.IsHoldingItem() &&
+        Input.GetKeyDown(KeyCode.Q))
+    {
+        InventoryManager.Instance.DropHeldItem();
+    }
+
+    return;
+}
 
         Debug.Log("Hit : " + hit.collider.name);
 
@@ -82,33 +90,52 @@ public class InteractionManager : MonoBehaviour
         // SINGLE DOOR
         //==================================================
 
-        DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
+       DoorInteraction door = hit.collider.GetComponent<DoorInteraction>();
 
 if (door != null)
 {
     crosshair.SetActive(false);
 
-    // Door needs a key
-    if (door.requiresKey)
+    // Showing the "Insert Key" message?
+    if (keyTextTimer > 0)
     {
-        if (InventoryManager.Instance.HoldingKey(door.keyID))
-        {
-            eText.SetActive(true);
+        eText.SetActive(false);
+        qText.SetActive(false);
+        keyNeededText.SetActive(true);
 
-            if (Input.GetKeyDown(KeyCode.E))
+        keyTextTimer -= Time.deltaTime;
+
+        if (keyTextTimer <= 0f)
+        {
+            keyNeededText.SetActive(false);
+            eText.SetActive(true);
+        }
+
+        return;
+    }
+
+    eText.SetActive(true);
+
+    if (Input.GetKeyDown(KeyCode.E))
+    {
+        if (door.IsLocked())
+        {
+            if (InventoryManager.Instance.HoldingKey(door.keyID))
+            {
+                door.Unlock();
                 door.Interact();
+            }
+            else
+            {
+                keyNeededText.SetActive(true);
+                eText.SetActive(false);
+                keyTextTimer = 2f;
+            }
         }
         else
         {
-            keyNeededText.SetActive(true);
-        }
-    }
-    else
-    {
-        eText.SetActive(true);
-
-        if (Input.GetKeyDown(KeyCode.E))
             door.Interact();
+        }
     }
 
     return;
@@ -149,6 +176,46 @@ if (door != null)
         }
 
         //==================================================
+// GAS MASK HOTKEY
+//==================================================
+
+if (Input.GetKeyDown(KeyCode.R))
+{
+    Debug.Log("Global R");
+
+    GasMask gasMask = GasMask.Instance;
+
+    if (gasMask == null)
+    {
+        Debug.Log("GasMask NULL");
+        return;
+    }
+
+    Debug.Log("Wearing = " + gasMask.isWearing);
+    Debug.Log("Inventory = " + gasMask.inInventory);
+
+    if (gasMask.isWearing)
+    {
+        Debug.Log("Removing Mask");
+
+        gasMask.RemoveToInventory();
+        InventoryManager.Instance.StoreMask(gasMask);
+
+        return;
+    }
+
+    if (gasMask.inInventory)
+    {
+        Debug.Log("Wear Again");
+
+        gasMask.Wear();
+        InventoryManager.Instance.RemoveStoredMask();
+
+        return;
+    }
+}
+
+        //==================================================
         // CHAIR
         //==================================================
 
@@ -177,6 +244,53 @@ if (item != null)
     if (!item.canBePickedUp)
         return;
 
+   GasMask gasMask = item.GetComponent<GasMask>();
+   Debug.Log("GasMask Component = " + gasMask);
+
+if (gasMask != null)
+{
+    crosshair.SetActive(false);
+    rText.SetActive(true);
+
+    if (Input.GetKeyDown(KeyCode.R))
+    {
+        // On floor -> Wear
+        if (!gasMask.isWearing && !gasMask.inInventory)
+        {
+            gasMask.Wear();
+
+            // Hide R after wearing
+            rText.SetActive(false);
+            crosshair.SetActive(true);
+        }
+
+        // Wearing -> Inventory
+        else if (gasMask.isWearing)
+        {
+            gasMask.RemoveToInventory();
+
+            InventoryManager.Instance.StoreMask(gasMask);
+
+            rText.SetActive(false);
+            crosshair.SetActive(true);
+        }
+
+        // Inventory -> Wear again
+        else if (gasMask.inInventory)
+        {
+            gasMask.Wear();
+
+            InventoryManager.Instance.RemoveStoredMask();
+
+            rText.SetActive(false);
+            crosshair.SetActive(true);
+        }
+    }
+
+    return;
+}
+
+    // NORMAL PICKUP
     crosshair.SetActive(false);
     qText.SetActive(true);
 
@@ -187,5 +301,8 @@ if (item != null)
 
     return;
 }
+
+
     }
+
 }

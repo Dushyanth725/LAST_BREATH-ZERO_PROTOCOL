@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     public Transform dropPoint;
 
     private PickupObject heldItem;
+    private GasMask heldMask;
 
     private void Awake()
     {
@@ -69,6 +70,30 @@ public class InventoryManager : MonoBehaviour
         return false;
 
     return heldItem.keyID == keyID;
+}
+
+public bool HoldingMask()
+{
+    return heldMask != null;
+}
+
+public void StoreMask(GasMask mask)
+{
+    heldMask = mask;
+
+    if (inventoryImage != null)
+    {
+        inventoryImage.sprite = mask.GetComponent<PickupObject>().itemIcon;
+        inventoryImage.gameObject.SetActive(true);
+    }
+}
+
+public void RemoveStoredMask()
+{
+    heldMask = null;
+
+    if (inventoryImage != null)
+        inventoryImage.gameObject.SetActive(false);
 }
 
 }

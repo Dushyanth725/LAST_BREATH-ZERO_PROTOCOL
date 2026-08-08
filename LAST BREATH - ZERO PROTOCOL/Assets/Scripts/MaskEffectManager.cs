@@ -7,15 +7,28 @@ public class MaskEffectManager : MonoBehaviour
 
     private bool wearingMask = false;
 
+    public bool WearingMask => wearingMask;
+
     public void WearMask()
     {
-        if (wearingMask) return;
+         Debug.Log("Inside WearMask()");
+        if (wearingMask)
+            return;
 
         wearingMask = true;
 
         normalVolume.SetActive(false);
         maskVolume.SetActive(true);
+    }
 
-        Debug.Log("Mask Equipped");
+    public void RemoveMask()
+    {
+        if (!wearingMask)
+            return;
+        Debug.Log("WearMask() called");
+        wearingMask = false;
+
+        normalVolume.SetActive(true);
+        maskVolume.SetActive(false);
     }
 }
