@@ -10,6 +10,8 @@ public class InteractionManager : MonoBehaviour
     public GameObject eText;
     public GameObject qText;
     public GameObject rText;
+    public GameObject maskHintText;
+    public GameObject dropHintText;
     public GameObject keyNeededText;
   
 
@@ -19,6 +21,8 @@ public class InteractionManager : MonoBehaviour
         eText.SetActive(false);
         qText.SetActive(false);
         rText.SetActive(false);
+        maskHintText.SetActive(false);
+        dropHintText.SetActive(false);
         keyNeededText.SetActive(false);
 
         
@@ -26,6 +30,20 @@ public class InteractionManager : MonoBehaviour
 
     private void Update()
     {
+        //==================================================
+        // TOP-RIGHT HINTS
+        //==================================================
+
+        if (GasMask.Instance != null && GasMask.Instance.isWearing)
+            maskHintText.SetActive(true);
+        else
+            maskHintText.SetActive(false);
+
+        if (InventoryManager.Instance != null &&
+            InventoryManager.Instance.IsHoldingItem())
+            dropHintText.SetActive(true);
+        else
+            dropHintText.SetActive(false);
 
         //==================================================
         // CHAIR IS BEING HELD
@@ -47,6 +65,55 @@ public class InteractionManager : MonoBehaviour
             return;
         }
 
+
+        //==================================================
+        // GAS MASK GLOBAL R
+        //==================================================
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GasMask gasMask = GasMask.Instance;
+
+            if (gasMask != null)
+            {
+                // MASK IS BEING WORN
+                if (gasMask.isWearing)
+                {
+                    // Drop currently held normal item first
+                    if (InventoryManager.Instance.IsHoldingItem())
+                    {
+                        InventoryManager.Instance.DropHeldItem();
+                    }
+
+                    // Remove mask and put it into inventory
+                    gasMask.RemoveToInventory();
+                    InventoryManager.Instance.StoreMask(gasMask);
+
+                    crosshair.SetActive(true);
+                    eText.SetActive(false);
+                    qText.SetActive(false);
+                    rText.SetActive(false);
+
+                    return;
+                }
+
+                // MASK IS IN INVENTORY
+                if (gasMask.inInventory)
+                {
+                    InventoryManager.Instance.RemoveStoredMask();
+
+                    gasMask.Wear();
+
+                    crosshair.SetActive(true);
+                    eText.SetActive(false);
+                    qText.SetActive(false);
+                    rText.SetActive(false);
+
+                    return;
+                }
+            }
+        }
+
         //==================================================
         // NORMAL UI
         //==================================================
@@ -54,7 +121,7 @@ public class InteractionManager : MonoBehaviour
         crosshair.SetActive(true);
         eText.SetActive(false);
         qText.SetActive(false);
-        qText.SetActive(false);
+        rText.SetActive(false);
         keyNeededText.SetActive(false);
 
 
@@ -175,45 +242,7 @@ if (door != null)
             return;
         }
 
-        //==================================================
-// GAS MASK HOTKEY
-//==================================================
 
-if (Input.GetKeyDown(KeyCode.R))
-{
-    Debug.Log("Global R");
-
-    GasMask gasMask = GasMask.Instance;
-
-    if (gasMask == null)
-    {
-        Debug.Log("GasMask NULL");
-        return;
-    }
-
-    Debug.Log("Wearing = " + gasMask.isWearing);
-    Debug.Log("Inventory = " + gasMask.inInventory);
-
-    if (gasMask.isWearing)
-    {
-        Debug.Log("Removing Mask");
-
-        gasMask.RemoveToInventory();
-        InventoryManager.Instance.StoreMask(gasMask);
-
-        return;
-    }
-
-    if (gasMask.inInventory)
-    {
-        Debug.Log("Wear Again");
-
-        gasMask.Wear();
-        InventoryManager.Instance.RemoveStoredMask();
-
-        return;
-    }
-}
 
         //==================================================
         // CHAIR

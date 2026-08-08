@@ -2,27 +2,27 @@ using UnityEngine;
 
 public class GasMask : MonoBehaviour
 {
-    public MaskEffectManager effectManager;
     public static GasMask Instance;
+
+    public MaskEffectManager effectManager;
 
     private PickupObject pickup;
 
     public bool isWearing = false;
     public bool inInventory = false;
 
-   private void Awake()
-{
-    Instance = this;
-    pickup = GetComponent<PickupObject>();
-}
+    private void Awake()
+    {
+        Instance = this;
+        pickup = GetComponent<PickupObject>();
+    }
 
     public void Wear()
     {
         Debug.Log("GasMask Wear()");
+
         isWearing = true;
         inInventory = false;
-
-         Debug.Log("Calling MaskEffect");
 
         effectManager.WearMask();
 
@@ -31,17 +31,19 @@ public class GasMask : MonoBehaviour
 
     public void RemoveToInventory()
     {
+        Debug.Log("GasMask RemoveToInventory()");
+
         isWearing = false;
         inInventory = true;
 
         effectManager.RemoveMask();
     }
 
-    public void DropFromInventory(Vector3 pos, Quaternion rot)
+    public void DropFromInventory(Vector3 position, Quaternion rotation)
     {
         isWearing = false;
         inInventory = false;
 
-        pickup.Drop(pos, rot);
+        pickup.Drop(position, rotation);
     }
 }
