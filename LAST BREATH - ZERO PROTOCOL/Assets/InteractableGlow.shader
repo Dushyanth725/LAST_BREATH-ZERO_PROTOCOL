@@ -1,9 +1,9 @@
-Shader "Custom/InteractableOutline"
+Shader "Custom/InteractableGlow"
 {
     Properties
     {
-        _OutlineColor ("Outline Color", Color) = (1,1,1,1)
-        _OutlineWidth ("Outline Width", Range(0.001, 0.05)) = 0.015
+        _Color ("Glow Color", Color) = (1, 0.8, 0, 1)
+        _Thickness ("Outline Thickness", Range(0.01, 0.1)) = 0.03
     }
 
     SubShader
@@ -21,8 +21,6 @@ Shader "Custom/InteractableOutline"
 
             Cull Front
             ZWrite Off
-            ZTest LEqual
-
             Blend SrcAlpha OneMinusSrcAlpha
 
             HLSLPROGRAM
@@ -43,24 +41,26 @@ Shader "Custom/InteractableOutline"
                 float4 positionHCS : SV_POSITION;
             };
 
-            float4 _OutlineColor;
-            float _OutlineWidth;
+            CBUFFER_START(UnityPerMaterial)
+                float4 _Color;
+                float _Thickness;
+            CBUFFER_END
 
-            Varyings vert(Attributes IN)
+            Varyings vert(Attributes input)
             {
-                Varyings OUT;
+                Varyings output;
 
-                float3 position = IN.positionOS.xyz;
-                position += normalize(IN.normalOS) * _OutlineWidth;
+                float3 position = input.positionOS.xyz;
+                position += input.normalOS * _Thickness;
 
-                OUT.positionHCS = TransformObjectToHClip(position);
+                output.positionHCS = TransformObjectToHClip(position);
 
-                return OUT;
+                return output;
             }
 
-            half4 frag(Varyings IN) : SV_Target
+            half4 frag(Varyings input) : SV_Target
             {
-                return _OutlineColor;
+                return _Color;
             }
 
             ENDHLSL
