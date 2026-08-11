@@ -8,9 +8,10 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
 
     [Header("Crouch")]
-    public float normalHeight = 1.8f;
-    public float crouchHeight = 0.95f;
-    public float crouchTransitionSpeed = 8f;
+    public Transform playerCamera;
+    public float normalCameraHeight = 1.6f;
+    public float crouchCameraHeight = 0.95f;
+    public float cameraTransitionSpeed = 6f;
 
     private CharacterController controller;
     private Vector3 velocity;
@@ -20,15 +21,12 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-
-        // Keep your normal CharacterController setup
-        controller.height = normalHeight;
     }
 
     void Update()
     {
         //==========================================
-        // CROUCH / STAND
+        // CROUCH TOGGLE
         //==========================================
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -37,21 +35,22 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //==========================================
-        // HEIGHT
+        // CAMERA CROUCH
         //==========================================
 
-        float targetHeight;
+        float targetCameraHeight = isCrouching
+            ? crouchCameraHeight
+            : normalCameraHeight;
 
-        if (isCrouching)
-            targetHeight = crouchHeight;
-        else
-            targetHeight = normalHeight;
+        Vector3 cameraPosition = playerCamera.localPosition;
 
-        controller.height = Mathf.Lerp(
-            controller.height,
-            targetHeight,
-            crouchTransitionSpeed * Time.deltaTime
+        cameraPosition.y = Mathf.Lerp(
+            cameraPosition.y,
+            targetCameraHeight,
+            cameraTransitionSpeed * Time.deltaTime
         );
+
+        playerCamera.localPosition = cameraPosition;
 
         //==========================================
         // MOVEMENT
@@ -60,19 +59,25 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
+        Vector3 move =
+            transform.right * x +
+            transform.forward * z;
 
-        // Slower when crouching
-        float currentSpeed = isCrouching ? crouchSpeed : speed;
+        // Slower while crouching
+        float currentSpeed = isCrouching
+            ? crouchSpeed
+            : speed;
 
         //==========================================
-        // NORMAL MOVEMENT
+        // NORMAL PLAYER MOVEMENT
         //==========================================
 
         if (ChairInteraction.CurrentChair == null)
         {
             controller.Move(
-                move.normalized * currentSpeed * Time.deltaTime
+                move.normalized *
+                currentSpeed *
+                Time.deltaTime
             );
         }
 
@@ -82,31 +87,40 @@ public class PlayerMovement : MonoBehaviour
 
         else
         {
-            ChairInteraction chair = ChairInteraction.CurrentChair;
+            ChairInteraction chair =
+                ChairInteraction.CurrentChair;
 
             Vector3 delta =
-                move.normalized * currentSpeed * Time.deltaTime;
+                move.normalized *
+                currentSpeed *
+                Time.deltaTime;
 
             controller.Move(delta);
 
+            // Move chair with player
             chair.transform.position += delta;
 
+            // Keep chair in front of player
             Vector3 target =
                 transform.position +
-                transform.forward * chair.holdDistance;
+                transform.forward *
+                chair.holdDistance;
 
             target.y = chair.transform.position.y;
 
             chair.transform.position = Vector3.Lerp(
                 chair.transform.position,
                 target,
-                chair.moveSpeed * Time.deltaTime
+                chair.moveSpeed *
+                Time.deltaTime
             );
 
+            // Rotate chair with player
             chair.transform.rotation = Quaternion.Lerp(
                 chair.transform.rotation,
                 chair.GetTargetRotation(),
-                chair.rotationSpeed * Time.deltaTime
+                chair.rotationSpeed *
+                Time.deltaTime
             );
         }
 
@@ -115,10 +129,14 @@ public class PlayerMovement : MonoBehaviour
         //==========================================
 
         if (controller.isGrounded && velocity.y < 0)
+        {
             velocity.y = -2f;
+        }
 
         velocity.y += gravity * Time.deltaTime;
 
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move(
+            velocity * Time.deltaTime
+        );
     }
 }
