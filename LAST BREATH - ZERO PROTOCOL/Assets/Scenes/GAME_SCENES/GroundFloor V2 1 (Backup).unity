@@ -15394,11 +15394,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  crouchSpeed: 2.75
+  crouchSpeed: 2
   gravity: -9.81
-  normalHeight: 1.8
-  crouchHeight: 0.95
-  crouchTransitionSpeed: 8
+  playerCamera: {fileID: 1267602439}
+  normalCameraHeight: 0.83
+  crouchCameraHeight: 0.4
+  cameraTransitionSpeed: 6
 --- !u!143 &1638647309
 CharacterController:
   m_ObjectHideFlags: 0
