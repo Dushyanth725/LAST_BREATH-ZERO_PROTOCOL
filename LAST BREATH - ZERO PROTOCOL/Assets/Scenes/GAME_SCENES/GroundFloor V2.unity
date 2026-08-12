@@ -17069,9 +17069,10 @@ MonoBehaviour:
   speed: 5
   crouchSpeed: 2.75
   gravity: -9.81
-  normalHeight: 1.8
-  crouchHeight: 0.95
-  crouchTransitionSpeed: 8
+  playerCamera: {fileID: 1267602439}
+  normalCameraHeight: 0.83
+  crouchCameraHeight: 0.4
+  cameraTransitionSpeed: 6
 --- !u!143 &1638647309
 CharacterController:
   m_ObjectHideFlags: 0
@@ -17179,7 +17180,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638647307}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -5.95, y: 2.18, z: -12.56}
   m_LocalScale: {x: 1, y: 1.8, z: 1}
   m_ConstrainProportionsScale: 0
@@ -24035,8 +24036,8 @@ SceneRoots:
   - {fileID: 1655928638}
   - {fileID: 370676322}
   - {fileID: 1363936560}
-  - {fileID: 607751652}
   - {fileID: 1638647313}
+  - {fileID: 607751652}
   - {fileID: 3339273858988509393}
   - {fileID: 1904171136}
   - {fileID: 1234461370}
