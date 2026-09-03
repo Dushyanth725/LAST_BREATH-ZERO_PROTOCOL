@@ -21807,7 +21807,7 @@ PrefabInstance:
     - target: {fileID: 6067083657209903008, guid: 4069256be5fe8fb479060495ba160327,
         type: 3}
       propertyPath: m_Name
-      value: LAB_DOOR
+      value: MEETINGROOMDOOR
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
